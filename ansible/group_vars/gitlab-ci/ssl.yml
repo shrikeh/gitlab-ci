@@ -1,0 +1,6 @@
+---
+gitlab_create_self_signed_cert: no
+gitlab_ssl_dir: /etc/gitlab/ssl
+gitlab_ssl_certificate: "{{ gitlab_ssl_dir }}/gitlab.crt"
+gitlab_ssl_certificate_key: "{{ gitlab_ssl_dir | mandatory }}/gitlab.key"
+...

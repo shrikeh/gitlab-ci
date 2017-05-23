@@ -1,0 +1,4 @@
+---
+gitlab_ssl_dir: /etc/gitlab-runner/certs
+gitlab_ssl_certificate: "{{ gitlab_ssl_dir }}/{{ gitlab_domain }}.crt"
+...

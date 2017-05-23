@@ -1,0 +1,4 @@
+---
+gitlab_runner_coordinator_url: "{{ gitlab_external_url }}/ci"
+gitlab_runner_list: []
+...

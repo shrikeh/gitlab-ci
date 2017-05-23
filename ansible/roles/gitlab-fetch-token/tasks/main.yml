@@ -1,0 +1,13 @@
+---
+- name: Fetch the token
+  shell:
+    "{{ gitlab_psql_exec }} -h /var/opt/gitlab/postgresql/ -d {{ gitlab_db_name }} -t -A -c '{{ gitlab_psql_query }}'"
+  become: true
+  become_user: "{{ gitlab_psql_user }}"
+  register: gitlab_runner_registration_token
+  delegate_to: localhost
+  run_once: yes
+
+- name: debug
+  debug:
+    var: gitlab_runner_registration_token

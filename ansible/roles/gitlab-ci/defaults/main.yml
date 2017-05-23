@@ -1,0 +1,5 @@
+---
+gitlab_psql_user:   'gitlab-psql'
+gitlab_psql_exec:   '/opt/gitlab/embedded/bin/psql'
+gitlab_db_name:     'gitlabhq_production'
+gitlab_psql_query:  'SELECT runners_registration_token FROM application_settings ORDER BY id DESC LIMIT 1;'

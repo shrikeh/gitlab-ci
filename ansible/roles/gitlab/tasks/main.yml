@@ -1,0 +1,23 @@
+---
+- name: Create the SSL directory
+  file:
+    path: "{{ gitlab_ssl_dir }}"
+    state: directory
+    owner: root
+    group: root
+
+- name: Copy the certificate into position
+  copy:
+    src: 'files/gitlab.crt'
+    dest: "{{ gitlab_ssl_certificate }}"
+    owner: root
+    group: root
+
+- name: Copy the key into position
+  copy:
+    src: 'files/gitlab.key'
+    dest: "{{ gitlab_ssl_certificate_key }}"
+    owner: root
+    group: root
+  when: gitlab_ssl_certificate_key is defined
+...

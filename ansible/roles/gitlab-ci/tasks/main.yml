@@ -1,0 +1,15 @@
+---
+- name: Find runner token
+  become: true
+  become_user: "{{ gitlab_psql_user }}"
+  vars:
+    ansible_ssh_pipelining: true
+  shell:
+    "{{ gitlab_psql_exec }} -h /var/opt/gitlab/postgresql/ -d {{ gitlab_db_name }} -t -A -c '{{ gitlab_psql_query }}'"
+  register: gitlab_ci_registration_token
+
+- name: debug
+  debug:
+    var: gitlab_ci_registration_token
+
+...

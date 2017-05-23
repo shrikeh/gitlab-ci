@@ -1,0 +1,16 @@
+---
+- hosts: gitlab
+  roles:
+    - { role: gitlab }
+
+- hosts: gitlab-ci
+  roles:
+    - { role : gitlab-ci }
+
+- hosts: gitlab-runner
+  vars:
+    gitlab_runner_registration_token: "{{ hostvars['gitlab']['gitlab_ci_registration_token']['stdout'] }}"
+  roles:
+    - { role : gitlab-runner }
+
+...
