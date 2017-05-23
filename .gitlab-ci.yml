@@ -6,5 +6,5 @@ stages:
 
 phpspec:
   stage: build
-  script: exit 1
+  script: exit 0
 ...
