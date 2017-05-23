@@ -8,8 +8,11 @@
     - { role : gitlab-ci }
 
 - hosts: php
+  vars:
+    composer_path: /opt/rh/rh-php56/root/usr/bin/php
   roles:
     - { role: php }
+    - { role: geerlingguy.composer }
 
 - hosts: gitlab-runner
   vars:
