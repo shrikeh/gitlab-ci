@@ -7,6 +7,6 @@ stages:
 phpspec:
   stage: build
   script:
-    - composer install
+    - /usr/local/bin/composer install
     - vendor/bin/phpspec run --format pretty --no-interaction --no-code-generation
 ...
