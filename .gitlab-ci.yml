@@ -1,4 +1,10 @@
 ---
+stages:
+  - build
+  - test
+  - deploy
+
 herewego:
+  stage: build
   script: 'echo foo'
 ...
