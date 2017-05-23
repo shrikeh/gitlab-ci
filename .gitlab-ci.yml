@@ -4,7 +4,7 @@ stages:
   - test
   - deploy
 
-herewego:
+phpspec:
   stage: build
-  script: 'echo foo'
+  script: exit 1
 ...
