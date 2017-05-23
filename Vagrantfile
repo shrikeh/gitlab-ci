@@ -18,7 +18,7 @@ unless ansible_host_dir.readable?
   abort "Ansible directory #{ansible_dir_path} not readable"
 end
 
-required_plugins = %w(vagrant-hostmanager vagrant-share)
+required_plugins = %w(vagrant-hostmanager vagrant-cachier vagrant-share)
 
 plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
 if not plugins_to_install.empty?
@@ -39,7 +39,6 @@ $bootstrap_script = <<SCRIPT
     echo '#!/usr/bin/env bash\n source /opt/rh/python27/enable;' >  /etc/profile.d/python2.7.sh
 SCRIPT
 
-
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
 # backwards compatibility). Please don't change it unless you know what
@@ -52,44 +51,77 @@ Vagrant.configure('2') do |config|
   config.hostmanager.ignore_private_ip  = false
   config.hostmanager.include_offline    = true
 
+  # Get the dynamic hostname from the running box so we know what to put in
+  # /etc/hosts even though we don't specify a static private ip address
+  config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
+    if vm.communicate.ready?
+      result = ""
+      vm.communicate.execute("ifconfig eth1") do |type, data|
+        result << data if type == :stdout
+      end
+    end
+    (ip = /inet addr:(\d+\.\d+\.\d+\.\d+)/.match(result)) && ip[1]
+  end
+
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
   config.vm.box                         = 'bento/centos-6.8'
   config.vm.box_download_checksum       = '7171e4c8db640cd93a1547baf96a0bb65547e134bfc5b1d34040523e9ba9886f'
   config.vm.box_download_checksum_type  = 'sha256'
+  config.cache.scope                    = :box
 
   # CentOS 6.8 doesn't come with Python 2.7, so we need to tweak this
   config.vm.provision 'bootstrap', type: 'shell', inline: $bootstrap_script
 
-  config.vm.define :runner do |runner|
-    box_name                    = 'gitlab-runner'
-    jard_ip                     = IPAddr.new (ENV['VAGRANT_JARD_IP'] || '192.168.33.12')
-    host_ip                     = IPAddr.new '127.0.0.1'
-    runner.vm.hostname          = box_name
-    runner.hostmanager.aliases  = %w(jard_ci_runner jard-ci-runner.local)
-    runner.vm.network :private_network, ip: jard_ip.to_s
+  %w(phpspec phpunit rspec cucumber).each do |runner|
+    config.vm.define "runner-#{runner}" do |node|
+      node.vm.hostname      = "runner-#{runner}"
+      node.vm.provider 'virtualbox' do |v|
+        v.name          = "jard-gitlab-runner-#{runner}"
+        v.linked_clone  = true
+        v.memory        = 1024
+        v.cpus          = 1
+      end
+      node.vm.network "private_network", type: 'dhcp'
+    end
   end
 
-  config.vm.define :gitlab, primary: true do |gitlab|
+  # config.vm.define :runner do |runner|
+  #   box_name                    = 'gitlab-runner'
+  #   jard_ip                     = IPAddr.new (ENV['VAGRANT_JARD_IP'] || '192.168.33.12')
+  #   host_ip                     = IPAddr.new '127.0.0.1'
+  #   runner.vm.hostname          = box_name
+  #   runner.hostmanager.aliases  = %w(jard_ci_runner jard-ci-runner.local)
+  #   runner.vm.network :private_network, ip: jard_ip.to_s
+  # end
+
+  config.vm.define :gitlab_controller, primary: true do |gitlab|
     box_name                    = 'jard-ci'
-    jard_ip                     = IPAddr.new (ENV['VAGRANT_JARD_IP'] || '192.168.33.11')
+    # jard_ip                     = IPAddr.new (ENV['VAGRANT_JARD_IP'] || '192.168.33.11')
     host_ip                     = IPAddr.new '127.0.0.1'
     gitlab.vm.hostname          = box_name
     gitlab.hostmanager.aliases  = %w(gitlab jard_ci jard-ci.local)
 
-    gitlab.vm.network :private_network, ip: jard_ip.to_s
+    gitlab.vm.provider 'virtualbox' do |v|
+      v.name          = "jard-gitlab-ci"
+      v.linked_clone  = true
+      v.memory        = 1024
+      v.cpus          = 1
+    end
+
+    gitlab.vm.network :private_network, type: 'dhcp'
 
     galaxyPath = '/galaxy'
 
-    gitlab.vm.network 'forwarded_port',
-      guest:    5432,
-      host:     5432,
-      host_ip:  host_ip.to_s,
-      id:       'postgresql'
+    # gitlab.vm.network 'forwarded_port',
+    #   guest:    5432,
+    #   host:     5432,
+    #   host_ip:  host_ip.to_s,
+    #   id:       'postgresql'
 
       # We create a local Galaxy roles folder, shared with the VM.
       # This allows us to cache downloaded Galaxy roles, but still easily delete them if we wish to.
-      gitlab.vm.synced_folder './galaxy', galaxyPath,
+      gitlab.vm.synced_folder './ansible/galaxy', galaxyPath,
         create:   true,
         id:       'galaxy'
 

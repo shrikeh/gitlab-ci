@@ -8,7 +8,18 @@ phpspec:
   stage: build
   script:
     - /usr/local/bin/composer install
-    - pwd
-    - ls -la bin
     - bin/phpspec run --format pretty --no-interaction --no-code-generation
+  tags:
+    - php
+    - phpspec
+
+phpunit:
+  stage: build
+  script:
+    - /usr/local/bin/composer install
+    - bin/phpspec run --format pretty --no-interaction --no-code-generation
+  tags:
+    - php
+    - phpunit
+
 ...

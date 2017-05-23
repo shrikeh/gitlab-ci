@@ -7,10 +7,15 @@
   roles:
     - { role : gitlab-ci }
 
+- hosts: php
+  roles:
+    - { role: php }
+
 - hosts: gitlab-runner
   vars:
-    gitlab_runner_registration_token: "{{ hostvars['gitlab']['gitlab_ci_registration_token']['stdout'] }}"
+    gitlab_runner_registration_token: "{{ hostvars['gitlab_controller']['gitlab_ci_registration_token']['stdout'] }}"
   roles:
     - { role : gitlab-runner }
+
 
 ...

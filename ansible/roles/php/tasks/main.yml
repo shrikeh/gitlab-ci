@@ -1,0 +1,7 @@
+---
+- name: Install PHP packages
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ php_packages }}"
+...
