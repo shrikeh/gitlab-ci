@@ -1,0 +1,4 @@
+---
+herewego:
+  script: 'echo foo'
+...
