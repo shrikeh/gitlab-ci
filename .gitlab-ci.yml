@@ -4,10 +4,12 @@ stages:
   - test
   - deploy
 
+before_script:
+  - /usr/local/bin/composer install
+
 phpspec:
   stage: build
   script:
-    - /usr/local/bin/composer install
     - bin/phpspec run --format pretty --no-interaction --no-code-generation
   tags:
     - php
@@ -22,4 +24,15 @@ phpunit:
     - php
     - phpunit
 
+phpcs:
+  stage: build
+  script:
+    - bin/phpcs src
+  tags:
+    - php
+
+cucumber:
+  stage: build
+  script:
+  - ruby --version
 ...

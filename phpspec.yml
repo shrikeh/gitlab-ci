@@ -1,5 +1,7 @@
 ---
 suites:
   default:
-    psr4_prefix: Foo
-    namespace: Foo
+    psr4_prefix:  Foo
+    namespace:    Foo
+    spec_path:    %paths.config%/tests
+    src_path:     %paths.config%/jard/laravel

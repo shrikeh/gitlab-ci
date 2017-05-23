@@ -14,11 +14,16 @@
     - { role: php }
     - { role: geerlingguy.composer }
 
+- hosts: gitlab-runner-cucumber
+  roles:
+    - { role: geerlingguy.ruby }
+
 - hosts: gitlab-runner
   vars:
     gitlab_runner_registration_token: "{{ hostvars['gitlab_controller']['gitlab_ci_registration_token']['stdout'] }}"
   roles:
     - { role : gitlab-runner }
+
 
 
 ...

@@ -2,4 +2,5 @@
 - src: geerlingguy.gitlab
 - src: geerlingguy.composer
 - src: DBLaci.gitlab-runner
+- src: geerlingguy.ruby
 ...
