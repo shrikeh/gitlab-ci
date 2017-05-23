@@ -1,0 +1,5 @@
+---
+suites:
+  default:
+    psr4_prefix: Foo
+    namespace: Foo

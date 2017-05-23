@@ -6,5 +6,7 @@ stages:
 
 phpspec:
   stage: build
-  script: exit 0
+  script:
+    - composer install
+    - vendor/bin/phpspec run
 ...
