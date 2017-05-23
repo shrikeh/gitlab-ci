@@ -7,5 +7,6 @@ php_packages:
   - rh-php56-php-devel
   - rh-php56-php-bcmath
   - rh-php56-php-pecl-mongo
+  - rh-php56-php-xml
 
 ...

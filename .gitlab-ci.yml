@@ -17,7 +17,7 @@ phpunit:
   stage: build
   script:
     - /usr/local/bin/composer install
-    - bin/phpspec run --format pretty --no-interaction --no-code-generation
+    - bin/phpunit
   tags:
     - php
     - phpunit
