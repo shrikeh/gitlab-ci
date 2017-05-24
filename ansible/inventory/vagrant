@@ -1,8 +1,4 @@
 gitlab_controller   ansible_connection=local
-runner-phpspec      ansible_ssh_private_key_file=/vagrant/.vagrant/machines/runner-phpspec/virtualbox/private_key
-runner-phpunit      ansible_ssh_private_key_file=/vagrant/.vagrant/machines/runner-phpunit/virtualbox/private_key
-runner-rspec        ansible_ssh_private_key_file=/vagrant/.vagrant/machines/runner-rspec/virtualbox/private_key
-runner-cucumber     ansible_ssh_private_key_file=/vagrant/.vagrant/machines/runner-cucumber/virtualbox/private_key
 
 [gitlab:vars]
 ansible_python_interpreter=python

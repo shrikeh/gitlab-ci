@@ -44,7 +44,6 @@ SCRIPT
 # backwards compatibility). Please don't change it unless you know what
 # you're doing.
 Vagrant.configure('2') do |config|
-
   config.hostmanager.enabled            = true
   config.hostmanager.manage_host        = true
   config.hostmanager.manage_guest       = true
@@ -65,35 +64,29 @@ Vagrant.configure('2') do |config|
 
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://atlas.hashicorp.com/search.
+  # config.vm.box                           = './boxes/gitlab.box'
   config.vm.box                         = 'bento/centos-6.8'
   config.vm.box_download_checksum       = '7171e4c8db640cd93a1547baf96a0bb65547e134bfc5b1d34040523e9ba9886f'
   config.vm.box_download_checksum_type  = 'sha256'
   config.cache.scope                    = :box
 
   # CentOS 6.8 doesn't come with Python 2.7, so we need to tweak this
-  config.vm.provision 'bootstrap', type: 'shell', inline: $bootstrap_script
+  config.vm.provision 'bootstrap',
+    type: 'shell',
+    inline: $bootstrap_script
 
   %w(phpspec phpunit rspec cucumber).each do |runner|
     config.vm.define "runner-#{runner}" do |node|
-      node.vm.hostname      = "runner-#{runner}"
-      node.vm.provider 'virtualbox' do |v|
+      node.vm.hostname  = "runner-#{runner}"
+      node.vm.provider :virtualbox do |v|
         v.name          = "jard-gitlab-runner-#{runner}"
         v.linked_clone  = true
-        v.memory        = 1024
+        v.memory        = 512
         v.cpus          = 1
       end
-      node.vm.network "private_network", type: 'dhcp'
+      node.vm.network :private_network, type: :dhcp
     end
   end
-
-  # config.vm.define :runner do |runner|
-  #   box_name                    = 'gitlab-runner'
-  #   jard_ip                     = IPAddr.new (ENV['VAGRANT_JARD_IP'] || '192.168.33.12')
-  #   host_ip                     = IPAddr.new '127.0.0.1'
-  #   runner.vm.hostname          = box_name
-  #   runner.hostmanager.aliases  = %w(jard_ci_runner jard-ci-runner.local)
-  #   runner.vm.network :private_network, ip: jard_ip.to_s
-  # end
 
   config.vm.define :gitlab_controller, primary: true do |gitlab|
     box_name                    = 'jard-ci'
@@ -102,14 +95,14 @@ Vagrant.configure('2') do |config|
     gitlab.vm.hostname          = box_name
     gitlab.hostmanager.aliases  = %w(gitlab jard_ci jard-ci.local)
 
-    gitlab.vm.provider 'virtualbox' do |v|
-      v.name          = "jard-gitlab-ci"
+    gitlab.vm.provider :virtualbox do |v|
+      v.name          = 'jard-gitlab-ci'
       v.linked_clone  = true
       v.memory        = 1024
-      v.cpus          = 1
+      v.cpus          = 2
     end
 
-    gitlab.vm.network :private_network, type: 'dhcp'
+    gitlab.vm.network :private_network, type: :dhcp
 
     galaxyPath = '/galaxy'
 
@@ -123,10 +116,10 @@ Vagrant.configure('2') do |config|
       # This allows us to cache downloaded Galaxy roles, but still easily delete them if we wish to.
       gitlab.vm.synced_folder './ansible/galaxy', galaxyPath,
         create:   true,
-        id:       'galaxy'
+        id:       :galaxy,
+        type:     :nfs
 
-
-      gitlab.vm.provision 'ansible_local' do |ansible|
+      gitlab.vm.provision :ansible_local do |ansible|
         ansible.install_mode      = :pip
         ansible.config_file       = 'ansible/ansible.cfg'
         ansible.playbook          = 'ansible/playbook.yml'
