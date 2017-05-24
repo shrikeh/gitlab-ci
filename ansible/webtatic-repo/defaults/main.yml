@@ -1,0 +1,4 @@
+---
+webtatic_repo_url: 'https://mirror.webtatic.com/yum/el6/latest.rpm'
+webtatic_repo_gpg_key_url: 'https://mirror.webtatic.com/yum/RPM-GPG-KEY-webtatic-andy'
+...

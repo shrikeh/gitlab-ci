@@ -1,0 +1,11 @@
+---
+- name: Install Webtatic repo.
+  yum:
+    name: "{{ webtatic_repo_url }}"
+    state: present
+
+- name: Import Webtatic GPG key.
+  rpm_key:
+    key: "{{ webtatic_repo_gpg_key_url }}"
+    state: present
+...

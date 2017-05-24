@@ -1,12 +1,7 @@
 ---
 php_packages:
-  - rh-php56-php-cli
-  - rh-php56-php-mbstring
-  - rh-php56-php-common
-  - rh-php56-php-opcache
-  - rh-php56-php-devel
-  - rh-php56-php-bcmath
-  - rh-php56-php-pecl-mongo
-  - rh-php56-php-xml
+  - php71w
+  - php71w-cli
+  - php71w-opcache
 
 ...

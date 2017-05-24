@@ -15,11 +15,10 @@
 - hosts: gitlab-runner
   vars:
     gitlab_runner_registration_token: "{{ hostvars['gitlab_controller']['gitlab_ci_registration_token']['stdout'] }}"
-    php_executable: '/opt/rh/rh-php56/root/usr/bin/php'
   roles:
-    - { role : gitlab-runner }
     - { role: php }
     - { role: geerlingguy.composer }
+    - { role : gitlab-runner }
 
 
 

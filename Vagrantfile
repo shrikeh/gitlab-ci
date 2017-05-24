@@ -31,12 +31,15 @@ if not plugins_to_install.empty?
 end
 
 $bootstrap_script = <<SCRIPT
-    yum clean all
-    yum groupinstall -y 'Development tools'
-    yum install -y zlib-devel bzip2-devel openssl-devel xz-libs wget
-    yum install -y centos-release-scl
-    yum install -y python27
-    echo '#!/usr/bin/env bash\n source /opt/rh/python27/enable;' >  /etc/profile.d/python2.7.sh
+  if [ ! -e '/etc/profile.d/python2.7.sh' ] ; then
+    yum upgrade -y;
+    yum groupinstall -y 'Development tools';
+    yum install -y zlib-devel bzip2-devel openssl-devel xz-libs wget;
+    yum install -y centos-release-scl;
+    yum install -y python27 libselinux-python;
+    yum clean all;
+    echo '#!/usr/bin/env bash\n source /opt/rh/python27/enable;' >  /etc/profile.d/python2.7.sh;
+  fi
 SCRIPT
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
