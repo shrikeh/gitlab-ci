@@ -1,7 +1,8 @@
 ---
 php_packages:
-  - php71w
-  - php71w-cli
-  - php71w-opcache
+  - php56w
+  - php56w-cli
+  - php56w-opcache
+  - php56w-xml
 
 ...

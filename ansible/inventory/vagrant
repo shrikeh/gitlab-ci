@@ -1,6 +1,6 @@
-gitlab_controller   ansible_connection=local
+gitlab_controller ansible_connection=local ansible_python_interpreter=python
 
-[gitlab:vars]
+[all:vars]
 ansible_python_interpreter=python
 
 [gitlab:children]
