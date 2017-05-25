@@ -18,7 +18,7 @@ unless ansible_host_dir.readable?
   abort "Ansible directory #{ansible_dir_path} not readable"
 end
 
-required_plugins = %w(vagrant-hostmanager vagrant-cachier vagrant-share)
+required_plugins = %w(vagrant-hostmanager vagrant-share vagrant-cachier)
 
 plugins_to_install = required_plugins.select { |plugin| not Vagrant.has_plugin? plugin }
 if not plugins_to_install.empty?
@@ -30,17 +30,8 @@ if not plugins_to_install.empty?
   end
 end
 
-$bootstrap_script = <<SCRIPT
-  if [ ! -e '/etc/profile.d/python2.7.sh' ] ; then
-    yum upgrade -y;
-    yum groupinstall -y 'Development tools';
-    yum install -y zlib-devel bzip2-devel openssl-devel xz-libs wget;
-    yum install -y centos-release-scl;
-    yum install -y python27 libselinux-python;
-    yum clean all;
-    echo '#!/usr/bin/env bash\n source /opt/rh/python27/enable;' >  /etc/profile.d/python2.7.sh;
-  fi
-SCRIPT
+# See https://gist.github.com/shrikeh/7773030d8b237ea3b7c5baab2652d927
+$bootstrap_script = 'https://gist.githubusercontent.com/shrikeh/7773030d8b237ea3b7c5baab2652d927/raw/centos6-python-bootstrap.sh'
 
 # All Vagrant configuration is done below. The "2" in Vagrant.configure
 # configures the configuration version (we support older styles for
@@ -58,7 +49,7 @@ Vagrant.configure('2') do |config|
   config.hostmanager.ip_resolver = proc do |vm, resolving_vm|
     if vm.communicate.ready?
       result = ""
-      vm.communicate.execute("ifconfig eth1") do |type, data|
+      vm.communicate.execute('ifconfig eth1') do |type, data|
         result << data if type == :stdout
       end
     end
@@ -70,13 +61,13 @@ Vagrant.configure('2') do |config|
   # config.vm.box                           = './boxes/gitlab.box'
   config.vm.box                         = 'bento/centos-6.8'
   config.vm.box_download_checksum       = '7171e4c8db640cd93a1547baf96a0bb65547e134bfc5b1d34040523e9ba9886f'
-  config.vm.box_download_checksum_type  = 'sha256'
-  config.cache.scope                    = :box
+  config.vm.box_download_checksum_type  = :sha256
+  config.cache.scope                    = :machine
 
   # CentOS 6.8 doesn't come with Python 2.7, so we need to tweak this
   config.vm.provision 'bootstrap',
     type: 'shell',
-    inline: $bootstrap_script
+    path: $bootstrap_script
 
   %w(phpspec phpunit rspec cucumber).each do |runner|
     config.vm.define "runner-#{runner}" do |node|
