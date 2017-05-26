@@ -34,5 +34,8 @@ phpcs:
 cucumber:
   stage: build
   script:
-  - ruby --version
+    - ruby --version
+  tags:
+    - ruby
+    - cucumber
 ...

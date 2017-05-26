@@ -4,5 +4,6 @@ php_packages:
   - php56w-cli
   - php56w-opcache
   - php56w-xml
+  - php56w-mbstring
 
 ...
