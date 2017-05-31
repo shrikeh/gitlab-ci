@@ -7,11 +7,6 @@
   roles:
     - { role : gitlab-ci }
 
-
-- hosts: gitlab-runner-cucumber
-  roles:
-    - { role: geerlingguy.ruby }
-
 - hosts: gitlab-runner
   vars:
     gitlab_runner_registration_token: "{{ hostvars['gitlab_controller']['gitlab_ci_registration_token']['stdout'] }}"
@@ -20,6 +15,16 @@
     - { role: geerlingguy.composer }
     - { role : gitlab-runner }
 
+- hosts: gitlab-runner-cucumber
+  vars:
+    rvm1_install_flags: '--auto-dotfiles'     # Remove --user-install from defaults
+    rvm1_install_path:  /usr/local/rvm
+    rvm1_user:          root
+  roles:
+    - { role: ruby }
 
 
+# rt department: 020 7 230 0565
+# 0207 230 7620
+# ref JC/010000843/17/LB
 ...
