@@ -56,7 +56,7 @@ cucumber:
   only:
     - develop
   script:
-    - ruby --version
+    - bundle install
   variables:
     COMPOSER_INSTALL: '--no-dev'
   dependencies:
