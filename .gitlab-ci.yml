@@ -49,7 +49,7 @@ php:phpcs:
 cucumber:
   stage: deploy
   environment:
-    name: staging
+    name: qa
   only:
     - develop
   script:
