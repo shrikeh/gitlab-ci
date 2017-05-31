@@ -45,15 +45,12 @@ php:phpcs:
   tags:
     - php
 
-deploy:staging
+cucumber:
   stage: deploy
   environment:
     name: staging
   only:
     - develop
-
-cucumber:
-  stage: deploy
   script:
     - ruby --version
   variables:
