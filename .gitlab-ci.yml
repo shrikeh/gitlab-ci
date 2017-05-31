@@ -11,8 +11,10 @@ composer:install:
   artifacts:
     paths:
       - vendor/
-phpspec:
-  stage: build
+    expire_in: 2 days
+
+php:phpspec:
+  stage: test
   script:
     - bin/phpspec run --format pretty --no-interaction --no-code-generation
   dependencies:
@@ -21,10 +23,9 @@ phpspec:
     - php
     - phpspec
 
-phpunit:
-  stage: build
+php:phpunit:
+  stage: test
   script:
-    - /usr/local/bin/composer install
     - bin/phpunit
   dependencies:
     - composer:install
@@ -32,8 +33,8 @@ phpunit:
     - php
     - phpunit
 
-phpcs:
-  stage: build
+php:phpcs:
+  stage: test
   script:
     - bin/phpcs src
   dependencies:
@@ -42,7 +43,7 @@ phpcs:
     - php
 
 cucumber:
-  stage: build
+  stage: test
   script:
     - ruby --version
   dependencies:
