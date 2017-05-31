@@ -4,10 +4,13 @@ stages:
   - test
   - deploy
 
+variables:
+  COMPOSER_INSTALL: '--dev'
+
 composer:install:
   stage: build
   script:
-    - /usr/local/bin/composer install
+    - "/usr/local/bin/composer install ${COMPOSER_INSTALL}"
   artifacts:
     paths:
       - vendor/
@@ -42,10 +45,19 @@ php:phpcs:
   tags:
     - php
 
+deploy:staging
+  stage: deploy
+  environment:
+    name: staging
+  only:
+    - develop
+
 cucumber:
-  stage: test
+  stage: deploy
   script:
     - ruby --version
+  variables:
+    COMPOSER_INSTALL: '--no-dev'
   dependencies:
     - composer:install
   tags:
