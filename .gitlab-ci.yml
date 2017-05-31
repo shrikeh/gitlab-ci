@@ -4,13 +4,19 @@ stages:
   - test
   - deploy
 
-before_script:
-  - /usr/local/bin/composer install
-
+composer:install:
+  stage: build
+  script:
+    - /usr/local/bin/composer install
+  artifacts:
+    paths:
+      - vendor/
 phpspec:
   stage: build
   script:
     - bin/phpspec run --format pretty --no-interaction --no-code-generation
+  dependencies:
+    - composer:install
   tags:
     - php
     - phpspec
@@ -20,6 +26,8 @@ phpunit:
   script:
     - /usr/local/bin/composer install
     - bin/phpunit
+  dependencies:
+    - composer:install
   tags:
     - php
     - phpunit
@@ -28,6 +36,8 @@ phpcs:
   stage: build
   script:
     - bin/phpcs src
+  dependencies:
+    - composer:install
   tags:
     - php
 
@@ -35,6 +45,8 @@ cucumber:
   stage: build
   script:
     - ruby --version
+  dependencies:
+    - composer:install
   tags:
     - ruby
     - cucumber
