@@ -39,7 +39,8 @@ php:phpunit:
 php:phpcs:
   stage: test
   script:
-    - vendor/bin/phpcs src
+    - vendor/bin/phpcs jard
+  allow_failure: true
   dependencies:
     - composer:install
   tags:
