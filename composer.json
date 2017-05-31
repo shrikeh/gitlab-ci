@@ -9,9 +9,5 @@
       "psr-4": {
         "Foo\\": "jard/laravel"
       }
-    },
-    "config": {
-      "bin-dir": "bin"
     }
-
 }

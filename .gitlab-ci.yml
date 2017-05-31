@@ -11,12 +11,13 @@ composer:install:
   artifacts:
     paths:
       - vendor/
+      - bin/
     expire_in: 2 days
 
 php:phpspec:
   stage: test
   script:
-    - bin/phpspec run --format pretty --no-interaction --no-code-generation
+    - vendor/bin/phpspec run --format pretty --no-interaction --no-code-generation
   dependencies:
     - composer:install
   tags:
@@ -26,7 +27,7 @@ php:phpspec:
 php:phpunit:
   stage: test
   script:
-    - bin/phpunit
+    - vendor/bin/phpunit
   dependencies:
     - composer:install
   tags:
@@ -36,7 +37,7 @@ php:phpunit:
 php:phpcs:
   stage: test
   script:
-    - bin/phpcs src
+    - vendor/bin/phpcs src
   dependencies:
     - composer:install
   tags:
