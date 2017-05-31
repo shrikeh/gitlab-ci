@@ -29,7 +29,7 @@ php:phpspec:
 php:phpunit:
   stage: test
   script:
-    - vendor/bin/phpunit
+    - vendor/bin/phpunit --version
   dependencies:
     - composer:install
   tags:
