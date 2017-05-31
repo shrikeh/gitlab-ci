@@ -50,6 +50,7 @@ cucumber:
   stage: deploy
   environment:
     name: qa
+    url: https://www.test-man.138.jard.clients.wtg.co.uk
   only:
     - develop
   script:
