@@ -8,6 +8,5 @@ fi
 
 # User specific environment and startup programs
 
-PATH=$PATH:$HOME/bin
-
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi;
+PATH="$HOME/.rbenv/bin:$PATH:$HOME/bin";
