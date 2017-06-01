@@ -1,0 +1,7 @@
+---
+ruby_yum_prerequisites:
+  - libyaml-devel
+  - readline-devel
+  - libffi-devel
+  - sqlite-devel
+...

@@ -17,11 +17,14 @@
 
 - hosts: gitlab-runner-cucumber
   vars:
-    rvm1_install_flags: '--auto-dotfiles'     # Remove --user-install from defaults
-    rvm1_install_path:  /usr/local/rvm
-    rvm1_user:          root
+    rbenv_owner: 'root'
+    rbenv_group: 'root'
+    rbenv_users:
+      - gitlab-runner
+      - vagrant
   roles:
     - { role: ruby }
+    - { role: zzet.rbenv }
 
 
 # rt department: 020 7 230 0565

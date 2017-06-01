@@ -1,0 +1,13 @@
+# {{ ansible_managed }}
+# .bash_profile
+
+# Get the aliases and functions
+if [ -f ~/.bashrc ]; then
+	. ~/.bashrc
+fi
+
+# User specific environment and startup programs
+
+PATH=$PATH:$HOME/bin
+
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi;
