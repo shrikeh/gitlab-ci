@@ -1,0 +1,5 @@
+---
+rbenv_users:
+  - gitlab-runner
+  - vagrant
+...

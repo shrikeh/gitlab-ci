@@ -1,0 +1,10 @@
+---
+rbenv_owner: 'root'
+rbenv_group: 'root'
+rbenv:
+  env: user
+  version: v1.0.0
+  default_ruby: 2.3.3
+  rubies:
+    - version: 2.3.3
+...
