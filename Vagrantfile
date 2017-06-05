@@ -55,10 +55,10 @@ Vagrant.configure('2') do |config|
   bootstrap_file = cachedir_path + bootstrap_uri.path.split('/').last
 
   unless File.exists?(bootstrap_file.to_s)
-    Puts "Downloading #{bootstrap_uri.to_s} ..."
+    puts "Downloading #{bootstrap_uri.to_s} ..."
     response = Net::HTTP.get_response(bootstrap_uri)
     if response.kind_of? Net::HTTPSuccess
-      Puts "Caching #{bootstrap_uri.to_s} to #{bootstrap_file.to_s} ..."
+      puts "Caching #{bootstrap_uri.to_s} to #{bootstrap_file.to_s} ..."
       File.open(bootstrap_file.to_s, 'w') do |bootstrap|
         bootstrap.write(response.body)
       end
